@@ -5,9 +5,10 @@ class Program
 {
     static void Main(string[] args)
     {
-        string connectionString = @"Data Source=..\..\..\Files\University.db;Version=3";
+        string filePath = @"..\..\..\Files\University.db";
+        string connectionString = $@"Data Source={filePath};Version=3";
         SQLiteConnection connection = new SQLiteConnection(connectionString);
-        DatabaseHelper dbHelper = new DatabaseHelper(connection);
+        DatabaseHelper dbHelper = new DatabaseHelper(connection, filePath);
         UserHelper uHelper = new UserHelper(dbHelper);
         uHelper.Start();
         dbHelper.Kill();

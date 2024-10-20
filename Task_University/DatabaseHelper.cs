@@ -4,11 +4,12 @@ using System.Data.SQLite;
 class DatabaseHelper
 {
     private SQLiteConnection _connection;
-    private string _filePath = @"..\..\..\Files\University.db";
+    private string _filePath;
 
-    public DatabaseHelper(SQLiteConnection connection)
+    public DatabaseHelper(SQLiteConnection connection, string filePath)
     { 
         _connection = connection;
+        _filePath = filePath;
         if (!File.Exists(_filePath))
         {
             _connection.Open();
