@@ -1,4 +1,4 @@
-﻿
+
 class UserHelper
 {
     private DatabaseHelper _dbHelper;
@@ -294,7 +294,7 @@ class UserHelper
 9. Средний балл студента в целом.
 10. Средний балл по факультету.
 52. Очистить базу данных.
-69. Завершение работу.");
+69. Завершение работы.");
     }
 
     private string AskOptionNumber()
