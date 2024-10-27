@@ -267,10 +267,22 @@ class DatabaseHelper
 
     public void Remove(string table, string tableId, int id)
     {
-        using (var command = new SQLiteCommand($"DELETE FROM {table} WHERE {tableId} = {id}", _connection)) 
+        using (var command = new SQLiteCommand($"SELECT EXISTS(SELECT * FROM {table} WHERE {tableId} = {id}) as result", _connection))
         {
-            command.ExecuteNonQuery();
-            Console.WriteLine($"Элемент ряда '{table}' под номером '{id}' и все связанные с ним элементы удалены.");
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    if ((int)(long)reader["result"] == 1)
+                    {
+                        using (var command1 = new SQLiteCommand($"DELETE FROM {table} WHERE {tableId} = {id}", _connection))
+                        {
+                            command1.ExecuteNonQuery();
+                            Console.WriteLine($"Элемент ряда '{table}' под номером '{id}'удален.");
+                        }
+                    }
+                }
+            }
         }
     }
      
@@ -416,20 +428,20 @@ class DatabaseHelper
                 title TEXT,
                 description TEXT,
                 teacher_id INTEGER,
-                FOREIGN KEY (teacher_id) REFERENCES Teachers(teacher_id) ON DELETE CASCADE);
+                FOREIGN KEY (teacher_id) REFERENCES Teachers(teacher_id));
             CREATE TABLE Exams (
                 exam_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 date_of_exam TEXT,
                 course_id INTEGER,
                 max_score INTEGER,
-                FOREIGN KEY (course_id) REFERENCES Courses(course_id) ON DELETE CASCADE);
+                FOREIGN KEY (course_id) REFERENCES Courses(course_id));
             CREATE TABLE Grades (
                 grade_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 student_id INTEGER,
                 exam_id INTEGER,
                 score INTEGER,
-                FOREIGN KEY (student_id) REFERENCES Students(student_id) ON DELETE CASCADE,
-                FOREIGN KEY (exam_id) REFERENCES Exams(exam_id) ON DELETE CASCADE);";
+                FOREIGN KEY (student_id) REFERENCES Students(student_id),
+                FOREIGN KEY (exam_id) REFERENCES Exams(exam_id));";
         using (var command = new SQLiteCommand(_connection))
         {
             command.CommandText = createTables;

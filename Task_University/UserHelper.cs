@@ -3,9 +3,13 @@ class UserHelper
 {
     private DatabaseHelper _dbHelper;
 
-    public UserHelper(DatabaseHelper dbHelper)
+    public UserHelper(DatabaseHelper dbHelper, bool fillWithTestValues=false)
     {
         _dbHelper = dbHelper;
+        if (fillWithTestValues)
+        {
+            FillWithTestValues();
+        }
     }
 
     public void Start()
@@ -69,7 +73,7 @@ class UserHelper
         string userOptionNumber = AskOptionNumber();
         if (userOptionNumber == "1")
         {
-            Console.Write("Введите данные студента через пробел: ");
+            Console.Write("Введите данные студента (имя, фамилия, факультет, дата рождения) через пробел: ");
             string[] args = Console.ReadLine().Split();
             if (args.Length == 4)
             {
@@ -79,7 +83,7 @@ class UserHelper
         }
         else if (userOptionNumber == "2")
         {
-            Console.Write("Введите данные преподавателя через пробел: ");
+            Console.Write("Введите данные преподавателя (имя, фамилия, факультет) через пробел: ");
             string[] args = Console.ReadLine().Split();
             if (args.Length == 3)
             {
@@ -88,7 +92,7 @@ class UserHelper
         }
         else if (userOptionNumber == "3")
         {
-            Console.Write("Введите данные курса через пробел: ");
+            Console.Write("Введите данные курса (название, описание, ID преподавателя) через пробел: ");
             string[] args = Console.ReadLine().Split();
             if (args.Length == 3) 
             {
@@ -100,7 +104,7 @@ class UserHelper
         }
         else if (userOptionNumber == "4")
         {
-            Console.Write("Введите данные экзамена через пробел: ");
+            Console.Write("Введите данные экзамена (дата, ID курса, макс. балл) через пробел: ");
             string[] args = Console.ReadLine().Split();
             if (args.Length == 3) 
             {
@@ -112,7 +116,7 @@ class UserHelper
         }
         else if (userOptionNumber == "5")
         {
-            Console.Write("Введите данные оценки через пробел: ");
+            Console.Write("Введите данные оценки (ID студента, ID экзамена, балл) через пробел: ");
             string[] args = Console.ReadLine().Split();
             if (args.Length == 3) 
             {
@@ -303,5 +307,14 @@ class UserHelper
         string optionNumber = Console.ReadLine();
         Console.WriteLine("~~~");
         return optionNumber;
+    }
+
+    private void FillWithTestValues()
+    {
+        for (int i = 1; i < 10; i++)
+        {
+            _dbHelper.AddStudent($"test{i}_student_name", $"test{i}_student_surname", $"test{i}_department", $"test{i}_date_of_birth");
+            _dbHelper.AddTeacher($"test{i}_teacher_name", $"test{i}_teacher_surname", $"test{i}_department");
+        }
     }
 }
