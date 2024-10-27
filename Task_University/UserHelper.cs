@@ -3,13 +3,9 @@ class UserHelper
 {
     private DatabaseHelper _dbHelper;
 
-    public UserHelper(DatabaseHelper dbHelper, bool fillWithTestValues=false)
+    public UserHelper(DatabaseHelper dbHelper)
     {
         _dbHelper = dbHelper;
-        if (fillWithTestValues)
-        {
-            FillWithTestValues();
-        }
     }
 
     public void Start()
@@ -18,7 +14,11 @@ class UserHelper
         string userOptionNumber = AskOptionNumber();
         while (userOptionNumber != "69")
         {
-            if (userOptionNumber == "1")
+            if (userOptionNumber == "0")
+            {
+                AddTestValues();
+            }
+            else if (userOptionNumber == "1")
             {
                 Option1();
             }
@@ -287,7 +287,8 @@ class UserHelper
 
     private void ShowOptions()
     {
-        Console.WriteLine(@"1. Добавление нового студента, преподавателя, курса, экзамена и оценки.
+        Console.WriteLine(@"0. Добавление тестовых значений для студентов и преподавателей
+1. Добавление нового студента, преподавателя, курса, экзамена и оценки.
 2. Изменение информации о студентах, преподавателях и курсах.
 3. Удаление студентов, преподавателей, курсов и экзаменов.
 4. Получение списка студентов по факультету.
@@ -309,7 +310,7 @@ class UserHelper
         return optionNumber;
     }
 
-    private void FillWithTestValues()
+    private void AddTestValues()
     {
         for (int i = 1; i < 10; i++)
         {
